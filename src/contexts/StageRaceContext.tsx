@@ -1,8 +1,10 @@
-import { createContext } from "react";
+import { createContext, useReducer } from "react";
 
 interface IStageRaceContext {}
 
 const StageRaceContext = createContext<IStageRaceContext>({});
+
+
 
 export const StageRaceProvider: React.FC = ({ children }) => {
   return (
