@@ -1,20 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Container, LoadingSpinner, ErrorOverlay, StageRaceListGroup, StageRaceListGroupItem } from "./shared";
+import { StageRaceContext } from "../contexts";
 import { getStageRaces } from "../api"
-import { IStageRace, IStage } from "../types";
+import { IStageRace, IStage, RaceActionType } from "../types";
 
 const StageRaceList: React.FC = () => {
+  const { racesState, racesDispatch } = useContext(StageRaceContext);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('')
-  const [races, setRaces] = useState<IStageRace[]>([]);
 
   const clearError: () => void = () => {
     setError('');
   }
 
   const deleteRace: (num: number) => void = (id) => {
-    const newRaces = races.filter(race => race.id !== id);
-    setRaces(newRaces)
+    racesDispatch({type: RaceActionType.DELETE_RACE, payload: id})
   }
 
   const getDateAndDuration: (arg: IStage[]) => { date: string, duration: string }= (arr: IStage[]) => {
@@ -40,7 +40,7 @@ const StageRaceList: React.FC = () => {
           const date2 = new Date(b.stages[0].date).getTime()
           return date1 - date2;
         })
-        setRaces(allRaces);
+        racesDispatch({type: RaceActionType.GET_RACES, payload: allRaces})
       } catch (err) {
         setError('Error loading stage races');
       }
@@ -53,10 +53,10 @@ const StageRaceList: React.FC = () => {
     <Container>
       {loading && <LoadingSpinner />}
       {error && <ErrorOverlay error={error} clearError={clearError}/>}
-      {races.length ?
+      {racesState.length ?
         <div>
           <StageRaceListGroup>
-            {races.map(({ id, name, stages }) => {
+            {racesState.map(({ id, name, stages }) => {
               const { date, duration } = getDateAndDuration(stages)
               return <StageRaceListGroupItem key={id} id={id} name={name} date={date} duration={duration} onDelete={ ()=>{deleteRace(id)} }/>
             })}
