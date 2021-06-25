@@ -11,12 +11,19 @@ export interface IStageRace {
 }
 
 export enum RaceActionType {
+  FETCH_RACES = 'FETCH_RACES',
+  FETCH_RACES_SUCCESS = 'FETCH_RACES_SUCCESS',
+  FETCH_RACES_FAILURE = 'FETCH_RACES_FAILURE',
   GET_RACES = 'GET_RACES',
   ADD_RACE = 'ADD_RACE',
   DELETE_RACE = 'DELETE_RACE'
 }
 
-export type RaceState = readonly IStageRace[];
+export type RaceState = Readonly<{
+  races: IStageRace[];
+  loading: boolean;
+  error: string | null
+}>
 
 export type RaceAction =
   {

@@ -6,6 +6,7 @@ import { IStageRace, IStage, RaceActionType } from "../types";
 
 const StageRaceList: React.FC = () => {
   const { racesState, racesDispatch } = useContext(StageRaceContext);
+  const { races } = racesState;
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('')
 
@@ -53,10 +54,10 @@ const StageRaceList: React.FC = () => {
     <Container>
       {loading && <LoadingSpinner />}
       {error && <ErrorOverlay error={error} clearError={clearError}/>}
-      {racesState.length ?
+      {races.length ?
         <div>
           <StageRaceListGroup>
-            {racesState.map(({ id, name, stages }) => {
+            {races.map(({ id, name, stages }) => {
               const { date, duration } = getDateAndDuration(stages)
               return <StageRaceListGroupItem key={id} id={id} name={name} date={date} duration={duration} onDelete={ ()=>{deleteRace(id)} }/>
             })}
