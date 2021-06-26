@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal } from "./shared";
+import { AddStageRaceForm } from "./AddStageRaceForm"
 
 type FormProps = {
   isOpen: boolean,
@@ -7,13 +8,10 @@ type FormProps = {
 }
 
 export const StageRaceForm: React.FC<FormProps> = ({isOpen, toggleOpen}) => {
-  const onClick: (ev: React.MouseEvent<HTMLElement>) => void = (ev) => {
-    
-  }
 
   return (
     <Modal isOpen={isOpen} >
-      <p>Modal is Open</p>
+      <AddStageRaceForm toggleOpen={toggleOpen}/>
     </Modal>
   )
 }
