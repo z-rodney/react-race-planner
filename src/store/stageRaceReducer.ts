@@ -1,12 +1,13 @@
 import { useReducer } from 'react'
-import { RaceState, RaceAction } from '../types'
+import { RaceState, RacesAction } from '../types'
 
 export const initialState: RaceState = {
   races: [],
   loading: true,
   error: null
 }
-export const racesReducer: (state: RaceState, action: RaceAction) => RaceState = (state = initialState, action) => {
+
+export const racesReducer: (state: RaceState, action: RacesAction) => RaceState = (state = initialState, action) => {
   switch (action.type) {
     case 'FETCH_RACES':
     case 'FETCH_RACES_FAILURE':
@@ -34,7 +35,7 @@ export const racesReducer: (state: RaceState, action: RaceAction) => RaceState =
   }
 }
 
-export const useRacesReducer: () => { racesState: RaceState, racesDispatch: React.Dispatch<RaceAction>} = () => {
+export const useRacesReducer: () => { racesState: RaceState, racesDispatch: React.Dispatch<RacesAction>} = () => {
   const [racesState, racesDispatch] = useReducer(racesReducer, initialState)
   return { racesState, racesDispatch }
 }

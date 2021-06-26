@@ -17,7 +17,7 @@ export type RaceState = Readonly<{
 }>
 
 
-export type RaceAction =
+export type RacesAction =
   {
     type: 'FETCH_RACES'
     payload: {

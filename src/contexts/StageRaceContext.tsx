@@ -1,10 +1,10 @@
 import { createContext } from "react";
 import { useRacesReducer, initialState } from '../store'
-import { RaceState, RaceAction } from '../types'
+import { RaceState, RacesAction } from '../types'
 
 interface IStageRaceContext {
   racesState: RaceState,
-  racesDispatch: React.Dispatch<RaceAction>
+  racesDispatch: React.Dispatch<RacesAction>
 }
 
 export const StageRaceContext = createContext<IStageRaceContext>({ racesState: initialState, racesDispatch: () => { }});
