@@ -1,5 +1,5 @@
 import { useReducer } from 'react'
-import { RaceActionType, RaceState, RaceAction } from '../types'
+import { RaceState, RaceAction } from '../types'
 
 export const initialState: RaceState = {
   races: [],
@@ -8,21 +8,17 @@ export const initialState: RaceState = {
 }
 export const racesReducer: (state: RaceState, action: RaceAction) => RaceState = (state = initialState, action) => {
   switch (action.type) {
-    case RaceActionType.GET_RACES:
+    case 'FETCH_RACES':
+    case 'FETCH_RACES_FAILURE':
+    case 'FETCH_RACES_SUCCESS':
       return {
         ...state,
-        races: action.payload
+        ...action.payload
       };
-    case RaceActionType.ADD_RACE:
+    case 'CLEAR_RACES_ERROR':
       return {
         ...state,
-        races: [action.payload, ...state.races]
-      };
-    case RaceActionType.DELETE_RACE:
-      const filteredRaces = state.races.filter((race => race.id !== action.payload))
-      return {
-        ...state,
-        races: filteredRaces
+        error: null
       }
     default:
       throw new Error(`Unhandled action type: ${JSON.stringify(action)}`)

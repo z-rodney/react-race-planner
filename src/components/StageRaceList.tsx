@@ -1,35 +1,19 @@
-import { useState, useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { Container, LoadingSpinner, ErrorOverlay, StageRaceListGroup, StageRaceListGroupItem } from "./shared";
 import { StageRaceContext } from "../contexts";
 import { getStageRaces } from "../api"
-import { IStageRace, IStage, RaceActionType } from "../types";
+import { getDateAndDuration } from '../utils'
 
 const StageRaceList: React.FC = () => {
   const { racesState, racesDispatch } = useContext(StageRaceContext);
-  const { races } = racesState;
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('')
+  const { races, loading, error } = racesState;
 
   const clearError: () => void = () => {
-    setError('');
+    racesDispatch({type: 'CLEAR_RACES_ERROR'})
   }
 
   const deleteRace: (num: number) => void = (id) => {
-    racesDispatch({type: RaceActionType.DELETE_RACE, payload: id})
-  }
-
-  const getDateAndDuration: (arg: IStage[]) => { date: string, duration: string }= (arr: IStage[]) => {
-    if (arr.length === 1) {
-      return { date: arr[0].date, duration: '1 day' }
-    } else {
-      const [race1, race2] = arr;
-      const date1 = new Date(race1.date).getTime();
-      const date2 = new Date(race2.date).getTime();
-      const dateDifference = Math.abs(date2 - date1);
-      const durationNum = Math.ceil(dateDifference / 86400000) + 1
-      const duration = `${durationNum} days`
-      return {date: race1.date, duration}
-    }
+    //racesDispatch({type: RaceActionType.DELETE_RACE, payload: id})
   }
 
   useEffect(() => {
@@ -41,14 +25,25 @@ const StageRaceList: React.FC = () => {
           const date2 = new Date(b.stages[0].date).getTime()
           return date1 - date2;
         })
-        racesDispatch({type: RaceActionType.GET_RACES, payload: allRaces})
+        racesDispatch({
+          type: 'FETCH_RACES_SUCCESS',
+          payload: {
+            races: allRaces,
+            loading: false,
+            error: null
+        }})
       } catch (err) {
-        setError('Error loading stage races');
+        racesDispatch({
+          type: 'FETCH_RACES_FAILURE',
+          payload: {
+            error: 'Error loading stage races',
+            loading: false
+          }
+        })
       }
-      setLoading(false)
     }
     retreiveRaces();
-  }, [])
+  }, [racesDispatch])
 
   return (
     <Container>
