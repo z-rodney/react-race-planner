@@ -1,15 +1,21 @@
-import { useContext, useEffect } from "react";
-import { Container, LoadingSpinner, ErrorOverlay, StageRaceListGroup, StageRaceListGroupItem } from "./shared";
+import { useState, useContext, useEffect } from "react";
+import { Container, LoadingSpinner, ErrorOverlay, StageRaceListGroup, StageRaceListGroupItem, PrimaryButton } from "./shared";
+import { StageRaceForm } from "./StageRaceForm"
 import { StageRaceContext } from "../contexts";
 import { getStageRaces, deleteStageRace } from "../api"
 import { getDateAndDuration } from '../utils'
 
 const StageRaceList: React.FC = () => {
+  const [isOpen, setOpen] = useState<boolean>(false);
   const { racesState, racesDispatch } = useContext(StageRaceContext);
   const { races, loading, error } = racesState;
 
   const clearError: () => void = () => {
     racesDispatch({type: 'CLEAR_RACES_ERROR'})
+  }
+
+  const toggleOpen: () => void = () => {
+    setOpen(!isOpen)
   }
 
   const deleteRace: (num: number) => void = async (id) => {
@@ -79,6 +85,8 @@ const StageRaceList: React.FC = () => {
         <div>
           No stage races
         </div>}
+      <PrimaryButton onClick={() => { setOpen(true) }}>Add Stage Race</PrimaryButton>
+      {isOpen && <StageRaceForm isOpen={isOpen} toggleOpen={toggleOpen }/>}
     </Container>
   )
 }
