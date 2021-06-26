@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { Container, LoadingSpinner, ErrorOverlay, StageRaceListGroup, StageRaceListGroupItem } from "./shared";
 import { StageRaceContext } from "../contexts";
-import { getStageRaces } from "../api"
+import { getStageRaces, deleteStageRace } from "../api"
 import { getDateAndDuration } from '../utils'
 
 const StageRaceList: React.FC = () => {
@@ -12,8 +12,26 @@ const StageRaceList: React.FC = () => {
     racesDispatch({type: 'CLEAR_RACES_ERROR'})
   }
 
-  const deleteRace: (num: number) => void = (id) => {
-    //racesDispatch({type: RaceActionType.DELETE_RACE, payload: id})
+  const deleteRace: (num: number) => void = async (id) => {
+    try {
+      await deleteStageRace(id);
+      racesDispatch({
+        type: 'DELETE_RACE_SUCCESS',
+        payload: {
+          loading: false,
+          error: null,
+          id: id
+        }
+      })
+    } catch (err) {
+      racesDispatch({
+        type: 'DELETE_RACE_FAILURE',
+        payload: {
+          error: 'Error deleting stage race',
+          loading: false
+        }
+      })
+    }
   }
 
   useEffect(() => {

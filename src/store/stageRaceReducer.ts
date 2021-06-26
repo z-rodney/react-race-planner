@@ -11,6 +11,7 @@ export const racesReducer: (state: RaceState, action: RaceAction) => RaceState =
     case 'FETCH_RACES':
     case 'FETCH_RACES_FAILURE':
     case 'FETCH_RACES_SUCCESS':
+    case 'DELETE_RACE_FAILURE':
       return {
         ...state,
         ...action.payload
@@ -19,6 +20,14 @@ export const racesReducer: (state: RaceState, action: RaceAction) => RaceState =
       return {
         ...state,
         error: null
+      }
+    case 'DELETE_RACE_SUCCESS':
+      const { races } = state;
+      const { payload: { id } } = action;
+      const racesAfterDeletion = races.filter(race => race.id !== id);
+      return {
+        ...state,
+        races: racesAfterDeletion
       }
     default:
       throw new Error(`Unhandled action type: ${JSON.stringify(action)}`)

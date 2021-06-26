@@ -33,13 +33,20 @@ export type RaceAction =
     }
   } |
   {
-    type: 'FETCH_RACES_FAILURE'
+    type: 'FETCH_RACES_FAILURE' | 'DELETE_RACE_FAILURE'
     payload: {
       error: string,
       loading: false
     }
   } | {
     type: 'CLEAR_RACES_ERROR'
+  } | {
+    type: 'DELETE_RACE_SUCCESS'
+    payload: {
+      id: number,
+      loading: false,
+      error: null
+    }
   }
 
 
